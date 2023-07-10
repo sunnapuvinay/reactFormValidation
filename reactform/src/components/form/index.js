@@ -58,7 +58,6 @@ const Form = () =>{
                     <label htmlFor="email" className="label">Email Address</label>
                     <input type="text" value={email} className="input" id="email" placeholder="you@@mobilefirstapplications.com" onChange={onChangeEmail} onBlur={onBlurEmail} />
                     <p className="error">{emailErr}</p>
-                    <p>{emailErr}</p>
                     <label htmlFor="password" className="label">Password</label>
                     <input type="password" value={password} className="input" id="password" placeholder="Enter Password" onChange={onChangePassword} onBlur={onBlurPassword} />
                     <p className="error">{passErr}</p>
