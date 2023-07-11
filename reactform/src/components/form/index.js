@@ -1,68 +1,46 @@
 import './index.css'
-import {useState} from 'react'
+import {useFormik} from 'formik'
+import * as Yup from 'yup'
 
 const loginImage = "https://res.cloudinary.com/dmmgoh7jg/image/upload/v1688973697/cloud-computing-modern-flat-concept-for-web-banner-design-man-enters-password-and-login-to-access-cloud-storage-for-uploading-and-processing-files-illustration-with-isolated-people-scene-free-vector-r_gvcqau.png"
 
+const initialValues = {
+    email: '',
+    password: ''
+}
+
+const loginSchema = Yup.object({
+    email: Yup.string().required("*Please Enter Your Email"),
+    password: Yup.string().min(6).required("*Please Enter Your Password")
+})
+
 const Form = () =>{
- const [email,setEmail] = useState('')
- const [password,setPassword] = useState('')
- const [emailErr,setEmailErr] = useState('')
- const [passErr,setPassErr] = useState('')
- const [errText,setErrText] = useState('')
 
- const onChangeEmail = (event) =>{
-    setEmail(event.target.value)
- }
+    const {values,errors,touched,handleBlur,handleChange,handleSubmit} = useFormik({
+        initialValues,
+        validationSchema: loginSchema,
+        onSubmit: (values,action) =>{
+           console.log(values)
+           action.resetForm()
+           
+        }
+    })
 
- const onChangePassword =(event)=>{
-    setPassword(event.target.value)  
- }
+//  console.log(errors)
 
- const onSubmitForm = (event)=>{
-    event.preventDefault()
-    if (email===""&&password===""){
-        setErrText('*Enter Email and Password')
-    }
-    else if(email===""){
-        setErrText('*Enter Email')
-    }
-    else if(password===""){
-        setErrText('*Enter Password')
-    }
-    else{
-        setErrText('')
-        
-    }
- }
-
- const onBlurEmail = (event) =>{
-    if (email===""){
-        setEmailErr('*Required')
-    }else{
-        setEmailErr("")
-    }
- }
-
- const onBlurPassword = (event) =>{
-    if (password===""){
-        setPassErr('*Required')
-    }else{
-        setPassErr("")
-    }
- }
     return(
         <div className="main-container">
             <div className="container">
-                <form className="form-container" onSubmit={onSubmitForm}>
+                <form className="form-container" onSubmit={handleSubmit}>
                     <h1 className="heading">Login</h1>
                     <label htmlFor="email" className="label">Email Address</label>
-                    <input type="text" value={email} className="input" id="email" placeholder="you@@mobilefirstapplications.com" onChange={onChangeEmail} onBlur={onBlurEmail} />
-                    <p className="error">{emailErr}</p>
+                    <input name="email" value={values.email} type="text" className="input" id="email" placeholder="you@@mobilefirstapplications.com" onChange={handleChange} onBlur={handleBlur}/>
+                    {errors.email && touched.email ? <p className="error">{errors.email}</p>: null}
                     <label htmlFor="password" className="label">Password</label>
-                    <input type="password" value={password} className="input" id="password" placeholder="Enter Password" onChange={onChangePassword} onBlur={onBlurPassword} />
-                    <p className="error">{passErr}</p>
+                    <input name="password" value={values.password} type="password" className="input" id="password" placeholder="Enter Password" onChange={handleChange} onBlur={handleBlur}/>
+                    {errors.password && touched.password ? <p className="error">{errors.password}</p>: null}
                     <button type="submit" className="button">Login</button>
-                    <p className="error">{errText}</p>
+                    {/* <p className="error">{errText}</p> */}
                 </form>
                 <img alt="login" src={loginImage} className="image" />
             </div>
